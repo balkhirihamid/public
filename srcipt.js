@@ -306,7 +306,6 @@ tailwind.config = {
     _('#drawerItemCount').innerText = pannier.length;
     !_(".notif .badge")? _(".notif").innerHTML += '<span class="badge absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">'+pannier.length+'</span>':_(".badge").innerText=pannier.length; 
   }
-
   const addToCard = (ref, img, desc, prix, one=false) => {
     var s = localStorage.getItem("pannier")??'[]';
     pannier = JSON.parse(s);
@@ -319,7 +318,6 @@ tailwind.config = {
     localStorage.setItem("pannier", JSON.stringify(pannier));
     notification(); renderBagItems();
   }
-
   const showTab = (e, id) =>{
     document.querySelectorAll('.tab-button').forEach((x)=>{x!=e?x.classList.remove("border-blue-500"):x.classList.add("border-blue-500")})
     document.querySelectorAll(".tab-content").forEach(x=>x.className="tab-content hidden");
