@@ -320,4 +320,10 @@ tailwind.config = {
     notification(); renderBagItems();
   }
 
+  const showTab = (e, id) =>{
+    document.querySelectorAll('.tab-button').forEach((x)=>{x!=e?x.classList.remove("border-blue-500"):x.classList.add("border-blue-500")})
+    document.querySelectorAll(".tab-content").forEach(x=>x.className="tab-content hidden");
+    _('#'+id).className="tab-content";
+  }
+  
   GetPannier();
