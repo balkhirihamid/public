@@ -313,7 +313,7 @@ tailwind.config = {
     if(!one){
       index == -1 ? pannier.push({img:img, ref:ref, desc:desc.trim(), color:_('input[name="color"]:checked').value, prix:prix, qte:qte}) : (pannier[index].qte=qte, pannier[index].color=_('input[name="color"]:checked').value ); 
     } else{
-      index == -1 ? pannier.push({img:img, ref:ref, desc:desc.trim(), color:'#0000', prix:prix, qte:qte}) : null;
+      index == -1 ? pannier.push({img:img, ref:ref, desc:desc.trim(), color:'#000000', prix:prix, qte:qte}) : null;
     }
     localStorage.setItem("pannier", JSON.stringify(pannier));
     notification(); renderBagItems();
