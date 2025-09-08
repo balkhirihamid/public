@@ -240,8 +240,8 @@ tailwind.config = {
         </div>
         <div class="text-right">
           <p class="font-semibold text-gray-900">$${(item.prix * item.qte).toFixed(2)}</p>
-          <button onclick="removeFromBag(${i})" class="text-white bg-red-500 p-1 hover:text-red-600 hover:bg-white ring-red-500 rounded  hover:ring-2 text-sm mt-2 transition-colors">
-            Remove
+          <button onclick="removeFromBag(${i})" class="p-1 hover:text-red-600 bg-white ring-red-500 rounded  hover:ring-1 text-sm mt-2 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#EA3323"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
           </button>
         </div>
       `;
