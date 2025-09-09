@@ -309,14 +309,14 @@ tailwind.config = {
 
   const switchOpt = hex => hex.slice(2) + hex.slice(0, 2);
 
-  const addToCard = (ref, img, desc, prix, one=false) => {
+  const addToCard = (ref, img, desc, prix, one=false, color) => {
     var s = localStorage.getItem("pannier")??'[]';
     pannier = JSON.parse(s);
     const index = pannier.findIndex(x => x.ref == ref.trim());
     if(!one){
       index == -1 ? pannier.push({img:img, ref:ref, desc:desc.trim(), color:_('input[name="color"]:checked').value, prix:prix, qte:qte}) : (pannier[index].qte=qte, pannier[index].color=_('input[name="color"]:checked').value ); 
     } else{
-      index == -1 ? pannier.push({img:img, ref:ref, desc:desc.trim(), color:x.color.split(',')[0].includes('#')?x.color.split(',')[0]:`#${switchOpt(x.color.split(',')[0])}`, prix:prix, qte:qte}) : null;
+      index == -1 ? pannier.push({img:img, ref:ref, desc:desc.trim(), color:color, prix:prix, qte:qte}) : null;
     }
     localStorage.setItem("pannier", JSON.stringify(pannier));
     notification(); renderBagItems();
