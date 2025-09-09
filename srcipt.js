@@ -307,8 +307,6 @@ tailwind.config = {
     !_(".notif .badge")? _(".notif").innerHTML += '<span class="badge absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">'+pannier.length+'</span>':_(".badge").innerText=pannier.length; 
   }
 
-  const switchOpt = hex => hex.slice(2) + hex.slice(0, 2);
-
   const addToCard = (ref, img, desc, prix, one=false, color) => {
     var s = localStorage.getItem("pannier")??'[]';
     pannier = JSON.parse(s);
