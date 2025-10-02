@@ -87,216 +87,27 @@ tailwind.config = {
 
 
   // Function to generate HTML string for the order
-  async function generateOrderHTML(pn) {
-    const author = document.head.querySelector("[name=author]").content??"tender";
-    const htmlContent = `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-      @media print {
-        body { print-color-adjust: exact; } }
-        .invoice-table th { background: #667eea; 
-      }
-    </style>
-  </head>
-  <body class="bg-gray-100 min-h-screen py-8">
-    <div class="container mx-auto max-w-5xl">
-      <div class="bg-white rounded-lg shadow-lg sm:p-8 p-2 mb-6">
-        <div class="flex justify-between items-start mb-8">
-          <div>
-            <h1 class="text-3xl font-bold text-gray-800 uppercase">order</h1>
-            <p class="text-gray-600 mt-2">Order #ORD-2025-001</p>
-            <p class="text-gray-600">Date: <span id="current-date"></span></p>
-          </div>
-          <div class="text-right">
-            <h2 class="text-xl font-semibold text-gray-700">${author}</h2>
-            <p class="text-gray-600 adresse">123 Tech Street</p>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto">
-          <table class="invoice-table w-full border-collapse border border-gray-300">
-            <thead>
-              <tr class="text-white text-sm">
-                <th class="border border-gray-300 px-4 py-3 text-left w-[81px]">Image</th>
-                <th class="border border-gray-300 px-4 py-3 text-left">Référence</th>
-                <th class="border border-gray-300 px-4 py-3 text-left">Description</th>
-                <th class="border border-gray-300 px-4 py-3 text-center">Qté</th>
-                <th class="border border-gray-300 px-4 py-3 text-right">Prix Unitaire</th>
-                <th class="border border-gray-300 px-4 py-3 text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody id="products-tbody">
-            </tbody>
-          </table>
-        </div>
-
-        <div class="mt-8 flex justify-end">
-          <div class="w-80 space-y-2">
-            <div class="flex justify-between py-2 border-b border-gray-200">
-              <span class="font-medium text-gray-600">Sous-total:</span>
-              <span id="subtotal" class="font-semibold text-gray-800">0 DH</span>
-            </div>
-            <div class="flex justify-between py-2 border-b border-gray-200">
-              <span class="font-medium text-gray-600">TVA (20%):</span>
-              <span id="tax" class="font-semibold text-gray-800">0 DH</span>
-            </div>
-            <div class="flex justify-between py-3 border-b-2 border-gray-800">
-              <span class="text-xl font-bold text-gray-800">Total TTC:</span>
-              <span id="total" class="text-xl font-bold text-green-600">0 DH</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-8 bg-gray-50 p-4 rounded-lg">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-            <div>
-              <p class="text-2xl font-bold text-blue-600" id="total-items">0</p>
-              <p class="text-gray-600">Articles</p>
-            </div>
-            <div>
-              <p class="text-2xl font-bold text-purple-600" id="total-quantity">0</p>
-              <p class="text-gray-600">Quantité Total</p>
-            </div>
-            <div>
-              <p class="text-2xl font-bold text-green-600" id="average-price">0 DH</p>
-              <p class="text-gray-600">Prix Moyen</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script>
-      const products = ${JSON.stringify(pn, null, 6)};
-
-      function formatPrice(price) {
-        return price.toLocaleString('fr-FR') + ' DH';
-      }
-
-      function createProductRow(product, index) {
-        const total = product.prix * product.qte;
-        const rowClass = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
-
-        return \`
-          <tr class="\${rowClass} hover:bg-blue-50 transition-colors">
-            <td class="border border-gray-300 p-2">
-              <img src="\${product.img}" 
-                alt="\${product.desc}" 
-                class="w-16 h-16 object-cover rounded border shadow-sm"
-                onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNiAyNkgzOFYzOEgyNlYyNloiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBmaWxsPSJub25lIi8+Cjwvc3ZnPgo='">
-            </td>
-            <td class="border border-gray-300 px-4 py-3">
-              <span class="font-semibold text-blue-600 uppercase">\${product.ref}</span>
-            </td>
-            <td class="border border-gray-300 px-4 py-3">
-              <span class="font-medium text-gray-800 capitalize">\${product.desc}</span>
-            </td>
-            <td class="border border-gray-300 px-4 py-3 text-center">
-              <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold">\${product.qte}</span>
-            </td>
-            <td class="border border-gray-300 px-4 py-3 text-right font-semibold text-gray-700">
-              \${formatPrice(product.prix)}
-            </td>
-            <td class="border border-gray-300 px-4 py-3 text-right font-bold text-green-600">
-              \${formatPrice(total)}
-            </td>
-          </tr>
-      \`;
-      }
-
-      function calculateTotals() {
-        const subtotal = products.reduce((sum, product) => sum + (product.prix * product.qte), 0);
-        const total = subtotal;
-        const totalItems = products.length;
-        const totalQuantity = products.reduce((sum, product) => sum + product.qte, 0);
-
-        document.getElementById('subtotal').textContent = formatPrice(subtotal);
-        document.getElementById('total').textContent = formatPrice(subtotal);
-        document.getElementById('total-items').textContent = totalItems;
-        document.getElementById('total-quantity').textContent = totalQuantity;
-        document.getElementById('average-price').textContent = formatPrice(subtotal);
-      }
-
-      function renderInvoice() {
-        const today = new Date();
-        document.getElementById('current-date').textContent = today.toLocaleDateString('fr-FR');
-
-        const tbody = document.getElementById('products-tbody');
-        tbody.innerHTML = products.map(createProductRow).join('');
-        calculateTotals();
-        document.querySelector(".adresse").textContent = ${document.head.querySelector("[name=address]")?.content??"not avilable"};
-      }
-      
-      document.addEventListener('DOMContentLoaded', renderInvoice);
-    </script>
-    </body>
-    </html>`;
-
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const base64 = await blobToBase64(blob);
-    const orderId = Date.now();
-
-    const sendedUrl = `https://tendergh.github.io/client/${orderId}/`;
-
-    const url = `https://api.github.com/repos/tendergh/client/contents/${orderId}/index.html`;
-
-    // 3. PUT request to GitHub
-    const res = await fetch(url, {
-      method: "PUT",
-      headers: { "Authorization": `token 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`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: "upload file via JS",
-        content: base64
-      })
-    });
-
-    if (res.ok) {
-      const aw = document.createElement('a'); 
-      aw.href = `https://wa.me/+212641550703?text=${encodeURIComponent(sendedUrl)}`; 
-      aw.target = '_blank'; aw.click();
-    }
-    else{ 
-      alert("Error Please try again.");
-      console.error("GitHub API error:", await res.json());}
-  }
-
   function formatNumber(n){
     return n.toLocaleString(undefined, {maximumFractionDigits:0});
   }
 
-    // === build the message string from items ===
   function generateMessage(list){
     let lines = [];
-    lines.push("Commande / Request");
-    lines.push("-------------------");
+    lines.push("*Commande / Request*");
 
     let total = 0;
     list.forEach((it, idx) => {
-      // compute subtotal
       const unit = Number(it.prix) || 0;
       const q = Number(it.qte) || 0;
       const sub = unit * q;
 
       total += sub;
 
-      // a single line per item
-      lines.push(`${idx+1}. ${it.ref} — ${it.desc}`);
-      lines.push(`   qte: ${q}  |  prix: ${formatNumber(unit)}  |  subtotal: ${formatNumber(sub)}`);
-      // optional: include image link (comment out if you don't want links)
-      //lines.push(`   img: ${it.img}`);
-      lines.push(""); // blank line between items
+      lines.push(`*${idx+1}*. \`${it.ref}\` *${q}* * _${formatNumber(unit)}_ = _*${formatNumber(sub)}*_`);
+      lines.push("");
     });
 
-    lines.push("-------------------");
-    lines.push(`Total: ${formatNumber(total)}`);
-    lines.push(""); // empty line
-    lines.push("Notes:"); // placeholder for extra notes
-    // join with newline
+    lines.push(` \`Total: ${formatNumber(total)}\``);
     return lines.join("\n");
   }
 
@@ -375,7 +186,11 @@ tailwind.config = {
   const removeFromBag = (index) =>{ index==0?pannier.shift():pannier.splice(index,1); localStorage.setItem("pannier", JSON.stringify(pannier)); GetPannier(); }
 
   const wsend = () =>{
-    generateOrderHTML(pannier);
+    const phone = document.head.querySelector("[name=tel]");
+    if(!phone){ alert("Phone number not found!"); return; }
+    const aw = document.createElement('a');
+    aw.href = `https://wa.me/${phone.content}?text=${encodeURIComponent(generateMessage(pannier))}`;
+    aw.target = '_blank'; aw.click();
   }
 
   function renderBagItems() {
